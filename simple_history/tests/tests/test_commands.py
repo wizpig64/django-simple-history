@@ -116,5 +116,6 @@ class TestMigrate(TestCase):
             'makemigrations', 'migration_test_app', stdout=StringIO())
 
     def test_migrate_command(self):
+        self.test_makemigration_command()
         management.call_command(
             'migrate', 'migration_test_app', fake=True, stdout=StringIO())
