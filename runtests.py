@@ -54,6 +54,12 @@ def main():
         settings.configure(**DEFAULT_SETTINGS)
     if hasattr(django, 'setup'):
         django.setup()
+
+    # reset the test app migrations
+    from django.core import management
+    management.call_command('makemigrations', 'tests', empty=True)
+    management.call_command('makemigrations', 'migration_test_app', empty=True)
+
     try:
         from django.test.runner import DiscoverRunner
     except ImportError:
