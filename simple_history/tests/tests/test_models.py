@@ -821,19 +821,6 @@ class TestTrackingInheritance(TestCase):
             ],
         )
 
-    def test_multiple_tracked_bases(self):
-        with self.assertRaises(exceptions.MultipleRegistrationsError):
-            class MultipleAbstractBases(
-                    TrackedAbstractBaseA, TrackedAbstractBaseB):
-                pass
-
-        # messy cleanup for a messy test
-        test_model = registered_models.pop(
-            'tests_multipleabstractbases')
-        management.call_command(
-            'makemigrations', test_model._meta.app_label, stdout=StringIO())
-        management.call_command('migrate', test_model._meta.app_label, stdout=StringIO())
-
     def test_tracked_abstract_and_untracked_concrete_base(self):
         self.assertEqual(
             [f.attname for f in InheritTracking1.history.model._meta.fields],
