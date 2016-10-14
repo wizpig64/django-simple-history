@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from datetime import datetime, timedelta
+from six.moves import cStringIO as StringIO
 import unittest
 import warnings
 
@@ -9,9 +10,11 @@ from django.db import models
 from django.db.models.fields.proxy import OrderWrt
 from django.test import TestCase
 from django.core.files.base import ContentFile
+from django.core import management
 
 from simple_history import exceptions, register
-from simple_history.models import HistoricalRecords, convert_auto_field
+from simple_history.models import (
+    HistoricalRecords, convert_auto_field, registered_models)
 from ..models import (
     AdminProfile, Bookcase, MultiOneToOne, Poll, Choice, Voter, Restaurant,
     Person, FileModel, Document, Book, HistoricalPoll, Library, State,
@@ -820,9 +823,16 @@ class TestTrackingInheritance(TestCase):
 
     def test_multiple_tracked_bases(self):
         with self.assertRaises(exceptions.MultipleRegistrationsError):
-            class TrackedWithMultipleAbstractBases(
+            class MultipleAbstractBases(
                     TrackedAbstractBaseA, TrackedAbstractBaseB):
                 pass
+
+        # messy cleanup for a messy test
+        test_model = registered_models.pop(
+            'tests_multipleabstractbases')
+        management.call_command(
+            'makemigrations', test_model._meta.app_label, stdout=StringIO())
+        management.call_command('migrate', test_model._meta.app_label, stdout=StringIO())
 
     def test_tracked_abstract_and_untracked_concrete_base(self):
         self.assertEqual(
