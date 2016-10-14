@@ -56,8 +56,11 @@ def main():
         join(dirname(__file__), 'simple_history', 'tests', 'migrations'),
         join(dirname(__file__), 'simple_history', 'tests', 'migration_test_app', 'migrations'),
     ]:
-        for migration_file_path in listdir(migration_path):
-            unlink(join(migration_path, migration_file_path))
+        try:
+            for migration_file_path in listdir(migration_path):
+                unlink(join(migration_path, migration_file_path))
+        except OSError:
+            pass
 
     if not settings.configured:
         settings.configure(**DEFAULT_SETTINGS)
