@@ -50,6 +50,10 @@ class TestPopulateHistory(TestCase):
             self.assertIn(msg, out.getvalue())
 
     def test_auto_populate(self):
+        # first migrate, in case there are missing tables
+        from django.core import management
+        management.call_command('migrate', verbosity=0)
+
         models.Poll.objects.create(question="Will this populate?",
                                    pub_date=datetime.now())
         models.Poll.history.all().delete()

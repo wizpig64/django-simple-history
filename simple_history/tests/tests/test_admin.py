@@ -266,6 +266,10 @@ class AdminSiteTest(WebTest):
 
     def test_deleteting_user(self):
         """Test deletes of a user does not cascade delete the history"""
+        # first migrate, in case there are missing tables
+        from django.core import management
+        management.call_command('migrate', verbosity=0)
+
         self.login()
         poll = Poll(question="why?", pub_date=today)
         poll._history_user = self.user
