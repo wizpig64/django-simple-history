@@ -58,6 +58,8 @@ def main():
     ]:
         try:
             for migration_file_path in listdir(migration_path):
+                if migration_file_path.startswith('0001_'):
+                    continue
                 unlink(join(migration_path, migration_file_path))
         except OSError:
             pass
