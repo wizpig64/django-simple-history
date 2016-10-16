@@ -36,6 +36,7 @@ DEFAULT_SETTINGS = dict(
     DATABASES={
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'test',
         }
     },
     MIDDLEWARE_CLASSES=[
@@ -68,6 +69,9 @@ def main():
         settings.configure(**DEFAULT_SETTINGS)
     if hasattr(django, 'setup'):
         django.setup()
+
+    from django.core import management
+    management.call_command('migrate', verbosity=0)
 
     try:
         from django.test.runner import DiscoverRunner
