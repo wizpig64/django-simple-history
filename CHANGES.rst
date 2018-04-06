@@ -1,6 +1,11 @@
 Changes
 =======
 
+2.1 (Unreleased)
+----------------
+
+- Added Django 2.1 support
+
 2.0 (2018-04-05)
 ----------------
 - Added Django 2.0 support (gh-330)
